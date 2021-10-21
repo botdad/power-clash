@@ -1,0 +1,17 @@
+[package]
+name = "power-clash"
+version = "0.0.1"
+authors = ["botdad"]
+edition = "2018"
+
+[dependencies]
+tiny-keccak = { version = "2.0.2", features = ["keccak"] }
+hex = "0.4"
+clap = "3.0.0-beta.5"
+rayon = "1.5"
+
+[[bin]]
+name = "power-clash"
+path = "src/main.rs"
+
+[dev-dependencies]
