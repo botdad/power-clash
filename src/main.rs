@@ -52,11 +52,8 @@ struct PowerClash {
 
 fn main() {
     let opts = PowerClash::parse();
-    let sighash_string = opts.sighash.to_string();
-    let sighash_bytes = hex::decode(sighash_string).expect("Decoding failed");
-
+    let sighash_bytes = hex::decode(&opts.sighash).expect("Decoding failed");
     let char_set_bytes = opts.char_set.as_bytes();
-
     let num_possible_chars = opts.char_set.len();
     let max_permutations = num_possible_chars.pow(opts.rnd_len);
 
@@ -68,8 +65,8 @@ fn main() {
     let start = Instant::now();
     (0..max_permutations).into_par_iter().find_any(|&j| {
         let mut test_rnd_string: Vec<u8> = Vec::with_capacity(opts.rnd_len as usize);
-        let mut i: u32 = 0;
 
+        let mut i: u32 = 0;
         while i < opts.rnd_len {
             let char_index_to_use = j / num_possible_chars.pow(i) % num_possible_chars;
             test_rnd_string.push(char_set_bytes[char_index_to_use]);
@@ -86,8 +83,7 @@ fn main() {
         let test_signature_hash = get_signature_hash(&test_function_signature);
 
         if sighash_bytes.eq(&test_signature_hash) {
-            let duration = start.elapsed();
-            println!("FOUND match in {:?}", duration);
+            println!("FOUND match in {:?}", start.elapsed());
 
             println!(
                 "{} should match 0x{}",
